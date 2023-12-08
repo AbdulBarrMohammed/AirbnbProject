@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "bmnumber_1"
+        }
+      ]
+    ],
+    "name": "airbnb",
+    "slug": "airbnb",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./app/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./app/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./app/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "76a5cbf1-2ad1-4587-adc4-a340da53ce72"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/76a5cbf1-2ad1-4587-adc4-a340da53ce72"
+    }
+  }
+}
