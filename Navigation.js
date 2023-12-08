@@ -9,10 +9,29 @@ import Wishlists from './app/screens/Wishlists';
 import { Ionicons } from '@expo/vector-icons'
 import CreateAccount from './app/screens/CreateAccount';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { View, Text, Image } from 'react-native';
+
 
 //Tab Bottom
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+
+const TripsTabIcon = ({ focused, color, size }) => {
+    return (
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          source={require('./app/assets/icons8-airbnb-32.png')}
+          style={{
+            width: size,
+            height: size,
+            tintColor: focused ? color : 'gray',
+          }}
+        />
+      </View>
+    );
+  };
 
 
 function TabGroup() {
@@ -32,6 +51,7 @@ function TabGroup() {
                     else if (route.name === "Explore") {
                         iconName = focused ? "search" : "search-outline";
                     }
+
                     //
                     return <Ionicons name={iconName} size={size} color={color} />
 
@@ -40,10 +60,24 @@ function TabGroup() {
             })}
             >
             <Tab.Screen name="Profile" component={Profile}/>
-            <Tab.Screen name="Explore" component={Explore}/>
-            <Tab.Screen name="Inbox" component={Inbox}/>
-            <Tab.Screen name="Trips" component={Trips}/>
             <Tab.Screen name="Wishlists" component={Wishlists}/>
+            <Tab.Screen
+                name="Trips"
+                component={Trips}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                    <TripsTabIcon focused={focused} color={color} size={size} />
+                    ),
+                    tabBarActiveTintColor: "#E1306C",
+                }}
+                />
+            <Tab.Screen name="Inbox" component={Inbox}/>
+            <Tab.Screen name="Explore" component={Explore}/>
+
+
+
+
+
         </Tab.Navigator>
     )
 }

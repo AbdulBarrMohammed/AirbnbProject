@@ -1,28 +1,31 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Button, TextInput, StyleSheet,TouchableOpacity} from 'react-native';
-//import { auth } from '../../firebase';
+import { View, Text, Button, TextInput, StyleSheet,TouchableOpacity, Alert} from 'react-native';
 import { auth }  from '../../firebase';
-//import { db } from '../../firebase';
 import {firebase} from '../../firebase';
-
-
-
 
 const CreateAccount = ({ navigation, route }) => {
     const userEmail = route.params?.userEmail;
     const userPassword = route.params?.userPassword;
 
-
+    //initializing state for user name and user email and password errors
     const [name, setName] = useState('');
-   // const currentDate = new Date();
-    //const formattedDate = `Registration Date: ${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [generalError, setGeneralError] = useState('');
 
 
 
+
+    // handle when account is created
     const handleCreateAccountPress = () => {
+        // get the current date of which the user creates account
+        setEmailError('');
+        setPasswordError('');
+        setGeneralError('');
         const currentDate = new Date();
         const creationDate = `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`; // Convert to ISO string for consistency
 
+        // firebase autheication creation with email and password
         auth.createUserWithEmailAndPassword(userEmail, userPassword)
             .then((userCredentials) => {
                 const user = userCredentials.user;
@@ -32,12 +35,12 @@ const CreateAccount = ({ navigation, route }) => {
             })
             .then(() => {
                 console.log('Profile updated!');
-                // Pass the creation date to the next screen
+                // Pass the username to the Profile screen
                 navigation.navigate('Profile', { userName: name });
 
             })
             .then(() => {
-
+                //sets name,c reation date , email for respective user in firestore
                 //const userDoc = db.collection('users').doc(auth.currentUser.uid);
                 const userDoc = firebase.firestore().collection('users').doc(auth.currentUser.uid);
                 return userDoc.set({
@@ -48,19 +51,34 @@ const CreateAccount = ({ navigation, route }) => {
 
             })
             .catch((error) => {
-                console.error('Error in account creation:', error);
+                //console.error('Error in account creation:', error);
+
+                if (error.code === 'auth/invalid-email') {
+                    setEmailError('Invalid email format');
+                    // Displays an alert for invalid email format
+                    Alert.alert('Error', 'Invalid email format');
+                } else if (error.code === 'auth/weak-password') {
+                    setPasswordError('Weak password. Please choose a stronger password.');
+                    // Displays an alert for weak password
+                    Alert.alert('Error', 'Weak password. Please choose a stronger password.');
+                } else {
+                    // Handles any  other errors as needed
+                    setGeneralError('An error occurred during account creation');
+                    // Displays a general error alert
+                    Alert.alert('Error', 'An error occurred during account creation');
+                }
             });
     };
 
-        //auth.createUserWithEmailAndPassword(userEmail, userPassword).then(userCredentials =>{
-        //       const user = userCredentials.user;
-        //        console.log(user.email);
-        //    })
-        //    .catch(error => alert(error.message))
-        //}
-
-
-
+    const handleFinishButtonPress = () => {
+        if (!name.trim()) {
+            // Checks if the name is not empty or only contains whitespace
+            Alert.alert('Error', 'Please enter your username before creating an account.');
+        } else {
+            // User has entered a valid username, proceed with account creation
+            handleCreateAccountPress();
+        }
+    };
 
     return (
         <View>
@@ -71,7 +89,7 @@ const CreateAccount = ({ navigation, route }) => {
                          style={styles.TextInput} placeholder = "Enter Profile name" />
 
             </View>
-            <TouchableOpacity style={styles.finish} onPress={handleCreateAccountPress} >
+            <TouchableOpacity style={styles.finish} onPress={handleFinishButtonPress} >
                     <Text style={styles.btnText}>Finish Creating Account</Text>
              </TouchableOpacity>
 

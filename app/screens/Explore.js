@@ -1,6 +1,6 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storage } from '../../firebase';
 
@@ -42,7 +42,6 @@ const listings = [
       location: 'Indianapolis, Indiana',
       rating: '4.98',
       imageUrl: '',
-      //imageUrl: require('../assets/house1.png'),
       host: 'Hosted by Lena',
       hostingYears: 8,
       price: '120',
@@ -57,9 +56,8 @@ const listings = [
         location: 'Marion, Indiana',
         rating: '4.92',
         imageUrl: '',
-        //imageUrl: require('../assets/house2.png'),
         host: 'Hosted by James',
-        hostingYears: 2,
+        hostingYears: 3,
         price: '170',
         reviews: '130 reviews',
         dates: '2019-10-10',
@@ -72,9 +70,8 @@ const listings = [
         location: 'Bloomington, Indiana',
         rating: '4.00',
         imageUrl: '',
-        //imageUrl: require('../assets/house3.png'),
         host: 'Hosted by Dave',
-        hostingYears: 2,
+        hostingYears: 5,
         price: '110',
         dates: '2020-12-07',
         reviews: '280 reviews',
@@ -87,7 +84,6 @@ const listings = [
         location: 'Avon, Indiana',
         rating: '4.00',
         imageUrl: '',
-        //imageUrl: require('../assets/house4.png'),
         host: 'Hosted by Abdul',
         hostingYears: 2,
         price: '220',
@@ -104,7 +100,6 @@ const listings = [
         rating: '4.00',
         reviews: '300 reviews',
         imageUrl: '',
-        //imageUrl: require('../assets/house6.png'),
         host: 'Hosted by Dan',
         hostingYears: 2,
         price: '250',
@@ -118,7 +113,6 @@ const listings = [
         location: 'Indianapolis, Indiana',
         rating: '2.90',
         imageUrl: '',
-        //imageUrl: require('../assets/house5.png'),
         host: 'Hosted by Conner',
         hostingYears: 2,
         price: '70',
@@ -132,6 +126,11 @@ const listings = [
 const Explore = ({ navigation }) => {
   const [updatedListings, setUpdatedListings] = useState([]);
 
+    /**
+     * get image url
+     * @param imageName (String)
+     * @return url (String)
+     */
     // Function to get the download URL for an image
     const getImageUrl = async (imageName) => {
         const imageRef = storage.ref().child(imageName);
@@ -139,17 +138,17 @@ const Explore = ({ navigation }) => {
         return url;
     };
 
-    // Fetch URLs and update listings on component mount
+    // fetches URLs and update listings
     useEffect(() => {
         const fetchImageUrlsAndUpdateListings = async () => {
             const promises = listings.map(async (listing) => {
-                // Assuming your Firebase Storage structure matches the image name like 'house1.png'
+
                 const imageUrl = await getImageUrl(`house${listing.id}.png`);
-                return { ...listing, imageUrl }; // Replace the local image with the fetched URL
+                return { ...listing, imageUrl }; // replaces the local image with the fetched URL
             });
 
             const updatedListingsWithUrls = await Promise.all(promises);
-            setUpdatedListings(updatedListingsWithUrls); // Update state with new listings
+            setUpdatedListings(updatedListingsWithUrls); // updates state with new listings
         };
 
         fetchImageUrlsAndUpdateListings();
@@ -271,22 +270,21 @@ const styles = StyleSheet.create({
 
     },
     safeArea: {
-        backgroundColor: 'white', // Adjust the background color as needed
+        backgroundColor: 'white',
     },
     searchBar: {
         height: 40,
         marginHorizontal: 10,
         borderWidth: 1,
         borderColor: 'black',
-        backgroundColor: 'white', // Light grey border
+        backgroundColor: 'white',
         borderRadius: 20,
         paddingLeft: 10,
         paddingBottom: 10,
         marginBottom: 20
-        // Add more styling as needed
+
     },
     container: {
-      //flex: 1,
       paddingTop: 10,
       backgroundColor: '#fff',
     },

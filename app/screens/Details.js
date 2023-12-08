@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { auth }  from '../../firebase';
 import { db } from '../../firebase';
-import { storage } from '../../firebase';
 const Details = ({ navigation, route }) => {
-    //const { image, location, rating, listingId } = route.params;
+    // route params for listing information
     const image = route.params?.image;
     const location = route.params?.location;
     const rating = route.params?.rating;
@@ -17,24 +16,20 @@ const Details = ({ navigation, route }) => {
     const rooms = route.params?.rooms;
     const price = route.params?.price;
 
-    const handleBackBtn = () => {
-        navigation.navigate('Explore');
-    }
-
     const handleReserveListing = async () => {
         console.log("Image URL:", image);
         const user = auth.currentUser; // Get the current signed-in user
 
         if (user) {
-            // Get user's UID
+            // gets user's UID
             const uid = user.uid;
 
             try {
-                // Add a new document in collection "users" under their UID with the listing info
+                // adds a new document in collection "users" under their UID with the listing info
                 await db.collection('users')
                     .doc(uid)
                     .collection('registeredListings')
-                    .doc(listingId) // Using listingId to uniquely identify the listing
+                    .doc(listingId) // listingId to uniquely identify the listing for respective user
                     .set({
                         image,
                         location,
@@ -50,15 +45,15 @@ const Details = ({ navigation, route }) => {
                     });
 
                 console.log('Listing registered to Firestore!');
-                // Optionally navigate back or show a success message
+
             } catch (error) {
                 console.error("Error registering listing: ", error);
-                // Optionally handle the error, such as showing an error message
+
             }
         } else {
-            // User not signed in, handle accordingly
+            // User not signed in check
             console.log('User must be signed in to register a listing');
-            // Optionally navigate to sign-in page or show a message
+
         }
     };
 
@@ -88,7 +83,6 @@ const Details = ({ navigation, route }) => {
       </View>
     );
   };
-
 
   const styles = StyleSheet.create({
     container: {
@@ -158,16 +152,16 @@ const Details = ({ navigation, route }) => {
 
     },
     bottomContainer: {
-        flexDirection: 'row', // Aligns children in a row
-        justifyContent: 'space-between', // Positions children with space between them
-        alignItems: 'center', // Centers children vertically
-        padding: 10, // Adds padding inside the container
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
       },
       priceStyle: {
-        fontSize: 18, // Sets the size of the text
-        fontWeight: 'bold', // Makes the text bold
-        color: '#333', // Sets the text color
-        // Additional styling for price text as needed
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+
       },
 
   });

@@ -1,12 +1,10 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     View,
     Text,
     StyleSheet,
-    Modal,
     TextInput,
-    ActivityIndicator,
     Button,
     TouchableOpacity,
     Dimensions, Image, Alert
@@ -18,37 +16,34 @@ import {
   import { db } from '../../firebase';
 
   const Profile = ({ navigation, route }) => {
-    //const userName = route.params?.userName;
 
 
     const [user, setUser] = useState(null);
     const [newUsername, setNewUsername] = useState(''); // New state for the new username
 
-    // ... existing code ...
 
     const handleUpdateUsername = () => {
       const user = auth.currentUser;
       if (newUsername.trim() === '') {
-        // Alert the user if the new username is empty
+        // Alert the user if the new username field is empty
         Alert.alert("Error", "Please enter a username before updating.");
-        return; // Exit the function early
+        return; // Exits the function early
       }
       if (user) {
-        // Update username in Firebase Auth
+        // Updates username in Firebase Auth
         user.updateProfile({
           displayName: newUsername
         }).then(() => {
           console.log("Username updated in Firebase Auth");
 
-          // Update username in Firestore
+          // Updates username in Firestore
           db.collection('users').doc(user.uid).update({
-            name: newUsername // Assuming 'name' is the field in Firestore
+            name: newUsername
           }).then(() => {
             console.log("Username updated in Firestore");
 
-            // Update local state
             setUser(currentUserData => ({ ...currentUserData, displayName: newUsername }));
-            setNewUsername(''); // Reset the input field
+            setNewUsername(''); // Resets the input field for new username
           }).catch((error) => {
             console.error("Error updating username in Firestore: ", error);
           });
@@ -87,20 +82,26 @@ import {
         }, 300);
 
     }
-    const handleSecondModal = () => {
-        setSecondModalVisible(false);
-        secondModalRef.current?.close();
+    //const handleSecondModal = () => {
+     //   setSecondModalVisible(false);
+    //    secondModalRef.current?.close();
         //secondModalRef.current?.dismiss();
-    };
+    //};
+
+    /**
+     * Naviagtes to login page once account is created
+     * @param none
+     * @return none
+     */
 
     const handleCreateAccountPress = () => {
-        // Close the second modal if it's open
+        // Closes the second modal if it's open
         if (isSecondModalVisible) {
             secondModalRef.current?.close();
             setSecondModalVisible(false);
         }
 
-        // Close the first modal if it's open
+        // Closes the first modal if it's open
         if (isFirstModalVisible) {
             firstModalRef.current?.close();
             setFirstModalVisible(false);
@@ -121,13 +122,16 @@ import {
                 if (doc.exists) {
                     const userData = doc.data();
 
-                    // Update state with user info and additional data
+                    // Updates state with user info and other additional data
                     setUser({
                         uid: userData.uid,
-                        displayName: userData.name, // Assuming you've stored it as 'name'
+                        displayName: userData.name,
                         creationDate: userData.creationDate,
-                        displayEmail: userData.userEmail // Assuming you've stored it as 'creationDate'
+                        displayEmail: userData.userEmail
                     });
+                    // Closes the bottom sheet after successful login
+                    secondModalRef.current?.close();
+                    setSecondModalVisible(false);
                 } else {
                     console.log("No such document!");
                 }
@@ -140,10 +144,8 @@ import {
         auth.signOut()
             .then(() => {
             console.log("User successfully logged out");
-            // Update the user state to null or perform any other actions needed after logout
+            // Updates the user state to null
             setUser(null);
-            // Optionally, navigate to the login screen or any other screen
-             // Replace 'Login' with the name of your login screen if different
             })
             .catch((error) => {
             console.error("Error logging out: ", error);
@@ -231,7 +233,6 @@ import {
                         isVisible={isSecondModalVisible}
                         onDismiss={() => setSecondModalVisible(false)}
                     >
-                        {/* Content of the second modal */}
                         <View>
                             <View style={styles.passwordContainer}>
                             <TextInput
@@ -285,7 +286,7 @@ import {
         paddingHorizontal: 5,
         marginVertical: 25,
         paddingTop: 10,
-        justifyContent: 'flex-start', // Align children vertically in the center
+        justifyContent: 'flex-start',
         alignItems: 'center'
 
         },
@@ -340,7 +341,7 @@ import {
       backgroundColor: '#fff',
     },
     headerContainer: {
-      paddingTop: 60, // Adjust for your status bar height
+      paddingTop: 60,
       paddingBottom: 20,
       paddingLeft: 20,
       borderBottomWidth: 1,
@@ -357,10 +358,7 @@ import {
       paddingTop: 20,
     },
     loginButton: {
-      borderWidth: 1,
-      borderColor: '#000',
-      paddingVertical: 10,
-      borderRadius: 5,
+
       alignItems: 'center',
     },
     loginButtonText: {
@@ -402,7 +400,7 @@ import {
       listingImage: {
         width: 70,
         height: 70,
-        borderRadius: 50, // Make the image round
+        borderRadius: 50,
         marginRight: 10,
       }
 
