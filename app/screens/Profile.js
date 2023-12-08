@@ -8,7 +8,6 @@ import {
     TextInput,
     ActivityIndicator,
     Button,
-    KeyboardAvoidingView,
     TouchableOpacity,
     Dimensions, Image, Alert
   } from "react-native";
