@@ -1,1 +1,43 @@
-This is an Airbnb App
+# Airbnb
+
+This is an Airbnb app that has 5 tabs that allows the user to login and look at homes to airbnb and reseve it
+
+## Functionality
+
+The following **required** functionality is completed:
+
+* [ ] User signs in using their email and password
+* [ ] If they have no registered they will be able to save homes for reservations
+* [ ] The user can take look at the explore page at home options
+* [ ] When clicking the lisiting title they will be navigated to a page that details the home
+
+The following **extensions** are implemented:
+
+* Firebase
+* firestore storage
+* react native
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+
+
+![Alt text](project11-1.gif)
+
+
+<img src='walkthrough.gif' title='Video Walkthrough' width='60%' alt='Video Walkthrough' />
+
+GIF created with Licecap (https://www.cockos.com/licecap/).
+
+## Notes
+
+I faced the challenge of learning how to use react native and its syntax as well as understanding how to navigate and design each screen.
+
+
+
+
+
+## License
+
+    Copyright 2023 Abdul-Barr Mohammed
+
