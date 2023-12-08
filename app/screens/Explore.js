@@ -52,7 +52,7 @@ const listings = [
     },
     {
         id: '2',
-        title: 'Big Home with a giant front lawn',
+        title: 'Big Home and giant front lawn',
         location: 'Marion, Indiana',
         rating: '4.92',
         imageUrl: '',
